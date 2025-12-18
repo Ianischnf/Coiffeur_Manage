@@ -2,6 +2,7 @@ package com.coiffeur.rdv.controller;
 
 import java.util.List;
 
+import com.coiffeur.rdv.dto.AppointmentRequest;
 import org.springframework.web.bind.annotation.*;
 
 import com.coiffeur.rdv.entity.Appointment;
@@ -18,8 +19,8 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public Appointment saveAppointment(@RequestBody Appointment appointment) {
-        return appointmentService.saveAppointment(appointment);
+    public Appointment saveAppointment(@RequestBody AppointmentRequest req) {
+        return appointmentService.saveAppointment(req);
     }
 
     @GetMapping

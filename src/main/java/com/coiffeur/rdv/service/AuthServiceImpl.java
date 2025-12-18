@@ -2,6 +2,7 @@ package com.coiffeur.rdv.service;
 
 import java.time.LocalDateTime;
 
+import com.coiffeur.rdv.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,10 @@ import com.coiffeur.rdv.repository.ClientRepository;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-	
-	@Autowired
-	private ClientRepository clientRepository;
-	private PasswordEncoder passwordEncoder;
-	private JwtService jwtService;
-	
+
+	private final ClientRepository clientRepository;
+	private final PasswordEncoder passwordEncoder;
+	private final JwtService jwtService;
 	public AuthServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
 		this.clientRepository = clientRepository;
 		this.passwordEncoder = passwordEncoder;

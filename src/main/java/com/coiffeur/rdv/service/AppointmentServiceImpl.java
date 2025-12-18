@@ -1,8 +1,10 @@
 package com.coiffeur.rdv.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import com.coiffeur.rdv.dto.AppointmentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 	private AppointmentRepository appointmentRepository;
 
 	@Override
-	public Appointment saveAppointment(Appointment appointment) {
-		
+	public Appointment saveAppointment(AppointmentRequest req) {
+		Appointment appointment = new Appointment(
+
+				req.startAt(),
+				req.endAt(),
+				req.note()
+		);
 		return appointmentRepository.save(appointment);
 	}
 

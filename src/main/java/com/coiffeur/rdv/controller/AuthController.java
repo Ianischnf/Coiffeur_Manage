@@ -10,7 +10,6 @@ import com.coiffeur.rdv.dto.LoginResponse;
 import com.coiffeur.rdv.dto.RegisterRequest;
 import com.coiffeur.rdv.entity.Client;
 import com.coiffeur.rdv.service.AuthService;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -28,7 +27,7 @@ public class AuthController {
 		return authService.register(req);
 	}
 	
-	@PostMapping()
+	@PostMapping("/login")
 	LoginResponse login(@Valid @RequestBody LoginRequest req) {
 		return authService.login(req);
 	}

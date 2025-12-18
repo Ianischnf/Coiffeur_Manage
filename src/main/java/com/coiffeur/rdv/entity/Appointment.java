@@ -2,38 +2,40 @@ package com.coiffeur.rdv.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "appointment")
 public class Appointment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+
+	@Column (name = "appointment_id")
 	private Long appointmentId;
+
+	@Column (name = "start_at")
 	private LocalDateTime startAt;
+
+	@Column (name = "end_at")
 	private LocalDateTime endAt;
+
+	@Column (name= "status")
 	private String status;
+
+	@Column (name = "note")
 	private String note;
 	
 	public Appointment() {}
 	
 	
-	public Appointment(LocalDateTime startAtLocalDateTime, LocalDateTime endAt, String status, String note) {
-		
+	public Appointment(LocalDateTime startAtLocalDateTime, LocalDateTime endAt,String note) {
 		this.startAt = startAt;
 		this.endAt = endAt;
-		this.status = status;
 		this.note = note;
 	}
 	
