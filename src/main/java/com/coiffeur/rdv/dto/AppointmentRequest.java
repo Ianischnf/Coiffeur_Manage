@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public record AppointmentRequest(
 
         LocalDateTime startAt,
-        LocalDateTime endAt,
+        String hairdresser,
         String note
 ) {
 }

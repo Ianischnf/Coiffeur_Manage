@@ -21,82 +21,56 @@ public class Appointment {
 	@Column (name = "start_at")
 	private LocalDateTime startAt;
 
-	@Column (name = "end_at")
-	private LocalDateTime endAt;
-
-	@Column (name= "status")
-	private String status;
+	@Column(name = "hair_dresser")
+	private String hairDresser;
 
 	@Column (name = "note")
 	private String note;
 	
 	public Appointment() {}
-	
-	
-	public Appointment(LocalDateTime startAtLocalDateTime, LocalDateTime endAt,String note) {
-		this.startAt = startAt;
-		this.endAt = endAt;
-		this.note = note;
-	}
-	
-	public Appointment(Long appointmentId, LocalDateTime startAtLocalDateTime, LocalDateTime endAt, String status, String note) {
-		
+
+	public Appointment(Long appointmentId, LocalDateTime startAt, String hairDresser, String note) {
 		this.appointmentId = appointmentId;
 		this.startAt = startAt;
-		this.endAt = endAt;
-		this.status = status;
+		//this.hairDresser = hairDresser;
 		this.note = note;
 	}
 
+	public Appointment(LocalDateTime startAt, String hairDresser, String note) {
+		this.startAt = startAt;
+		this.hairDresser = hairDresser;
+		this.note = note;
+	}
 
 	public Long getAppointmentId() {
 		return appointmentId;
 	}
 
-
 	public void setAppointmentId(Long appointmentId) {
 		this.appointmentId = appointmentId;
 	}
-
 
 	public LocalDateTime getStartAt() {
 		return startAt;
 	}
 
-
 	public void setStartAt(LocalDateTime startAt) {
 		this.startAt = startAt;
 	}
 
-
-	public LocalDateTime getEndAt() {
-		return endAt;
+	public String getHairDresser() {
+		return hairDresser;
 	}
 
-
-	public void setEndAt(LocalDateTime endAt) {
-		this.endAt = endAt;
+	public void setHairDresser(String hairDresser) {
+		this.hairDresser = hairDresser;
 	}
-
-
-	public String getStatus() {
-		return status;
-	}
-
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 
 	public String getNote() {
 		return note;
 	}
 
-
 	public void setNote(String note) {
 		this.note = note;
 	}
-	
-	
 }

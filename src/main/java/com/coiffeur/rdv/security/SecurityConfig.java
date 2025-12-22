@@ -47,6 +47,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Routes publiques (login / register)
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/hairdresser").permitAll()
+
 
                         // Toutes les autres routes nécessitent un token valide
                         .anyRequest().authenticated()

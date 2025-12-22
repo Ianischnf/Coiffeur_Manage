@@ -22,7 +22,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 		Appointment appointment = new Appointment(
 
 				req.startAt(),
-				req.endAt(),
+				req.hairdresser(),
 				req.note()
 		);
 		return appointmentRepository.save(appointment);
@@ -44,16 +44,10 @@ public class AppointmentServiceImpl implements AppointmentService{
 			appDB.setStartAt(appointment.getStartAt());
 		}
 		
-		if (Objects.nonNull(appointment.getEndAt())) {
-			appDB.setEndAt(appointment.getEndAt());
+		if (Objects.nonNull(appointment.getHairDresser())) {
+			appDB.setHairDresser(appointment.getHairDresser());
 		}
-		
-		if (Objects.nonNull(appointment.getStatus())
-		        && !"".equalsIgnoreCase(appointment.getStatus())) {
 
-			appDB.setStatus(appointment.getStatus());
-		}
-		
 		if (Objects.nonNull(appointment.getNote())
 		        && !"".equalsIgnoreCase(appointment.getNote())) {
 
