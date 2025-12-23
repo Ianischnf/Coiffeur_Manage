@@ -3,6 +3,9 @@ package com.coiffeur.rdv.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "hairdresser")
 public class HairDresser {
@@ -18,6 +21,9 @@ public class HairDresser {
 
     @Column(name = "lastname")
     private String LastName;
+
+    @OneToMany(mappedBy = "hairdresser")
+    private List<Appointment> appointments = new ArrayList<>();
 
     public HairDresser() {}
 

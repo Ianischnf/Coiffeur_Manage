@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.coiffeur.rdv.dto.AppointmentRequest;
+import com.coiffeur.rdv.entity.HairDresser;
+import com.coiffeur.rdv.repository.HairDresserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +15,31 @@ import com.coiffeur.rdv.repository.AppointmentRepository;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService{
-	
-	@Autowired
-	private AppointmentRepository appointmentRepository;
+
+	private final AppointmentRepository appointmentRepository;
+	private final HairDresserRepository hairDresserRepository;
+
+	public AppointmentServiceImpl(AppointmentRepository appointmentRepository, HairDresserRepository hairDresserRepository){
+		this.appointmentRepository = appointmentRepository;
+		this.hairDresserRepository = hairDresserRepository;
+	}
 
 	@Override
 	public Appointment saveAppointment(AppointmentRequest req) {
-		Appointment appointment = new Appointment(
 
+		HairDresser hairdresser = hairDresserRepository
+				.findById(req.hairdresserId())
+				.orElseThrow(() -> new RuntimeException(
+						"Hairdresser not found with id " + req.hairdresserId()
+				));
+
+
+		Appointment appointment = new Appointment(
 				req.startAt(),
-				req.hairdresser(),
-				req.note()
+				req.note(),
+				hairdresser
 		);
+
 		return appointmentRepository.save(appointment);
 	}
 
@@ -42,10 +57,6 @@ public class AppointmentServiceImpl implements AppointmentService{
 		
 		if (Objects.nonNull(appointment.getStartAt())) {
 			appDB.setStartAt(appointment.getStartAt());
-		}
-		
-		if (Objects.nonNull(appointment.getHairDresser())) {
-			appDB.setHairDresser(appointment.getHairDresser());
 		}
 
 		if (Objects.nonNull(appointment.getNote())

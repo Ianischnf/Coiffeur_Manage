@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "appointment")
 public class Appointment {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
@@ -21,25 +21,26 @@ public class Appointment {
 	@Column (name = "start_at")
 	private LocalDateTime startAt;
 
-	@Column(name = "hair_dresser")
-	private String hairDresser;
-
 	@Column (name = "note")
 	private String note;
-	
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "hairdresser_id", nullable = false)
+	private HairDresser hairdresser;
+
 	public Appointment() {}
 
-	public Appointment(Long appointmentId, LocalDateTime startAt, String hairDresser, String note) {
+	public Appointment(Long appointmentId, LocalDateTime startAt, String note, HairDresser hairDresser) {
 		this.appointmentId = appointmentId;
 		this.startAt = startAt;
-		//this.hairDresser = hairDresser;
 		this.note = note;
+		this.hairdresser = hairDresser;
 	}
 
-	public Appointment(LocalDateTime startAt, String hairDresser, String note) {
+	public Appointment(LocalDateTime startAt, String note, HairDresser hairDresser) {
 		this.startAt = startAt;
-		this.hairDresser = hairDresser;
 		this.note = note;
+		this.hairdresser = hairDresser;
 	}
 
 	public Long getAppointmentId() {
@@ -50,20 +51,20 @@ public class Appointment {
 		this.appointmentId = appointmentId;
 	}
 
+	public HairDresser getHairdresser() {
+		return hairdresser;
+	}
+
+	public void setHairdresser(HairDresser hairdresser) {
+		this.hairdresser = hairdresser;
+	}
+
 	public LocalDateTime getStartAt() {
 		return startAt;
 	}
 
 	public void setStartAt(LocalDateTime startAt) {
 		this.startAt = startAt;
-	}
-
-	public String getHairDresser() {
-		return hairDresser;
-	}
-
-	public void setHairDresser(String hairDresser) {
-		this.hairDresser = hairDresser;
 	}
 
 	public String getNote() {
