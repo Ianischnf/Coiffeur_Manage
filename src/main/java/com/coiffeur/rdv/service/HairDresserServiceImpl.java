@@ -4,6 +4,7 @@ import com.coiffeur.rdv.dto.HairDresserRequest;
 import com.coiffeur.rdv.entity.HairDresser;
 import com.coiffeur.rdv.repository.HairDresserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.Objects;
 public class HairDresserServiceImpl implements HairDresserService{
     @Autowired
     private HairDresserRepository hairDresserRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public HairDresserServiceImpl(HairDresserRepository hairDresserRepository){
         this.hairDresserRepository = hairDresserRepository;
@@ -23,7 +26,9 @@ public class HairDresserServiceImpl implements HairDresserService{
 
         HairDresser hairDresser = new HairDresser(
                 req.FirstName(),
-                req.LastName()
+                req.LastName(),
+                req.Email(),
+                passwordEncoder.encode(req.Password())
         );
 
         return hairDresserRepository.save(hairDresser);

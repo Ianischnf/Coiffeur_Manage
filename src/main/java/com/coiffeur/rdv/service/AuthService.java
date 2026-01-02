@@ -9,4 +9,6 @@ public interface AuthService {
 	
     Client register(RegisterRequest req);
     LoginResponse login(LoginRequest req);
+    LoginResponse loginHairdresser(LoginRequest req);
+    Long getCurrentHairdresserId();
 }

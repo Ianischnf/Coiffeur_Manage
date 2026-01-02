@@ -24,16 +24,22 @@ public class Appointment {
 	@Column (name = "note")
 	private String note;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private AppointmentStatus status;
+
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "hairdresser_id", nullable = false)
 	private HairDresser hairdresser;
 
 	public Appointment() {}
 
-	public Appointment(Long appointmentId, LocalDateTime startAt, String note, HairDresser hairDresser) {
+	public Appointment(Long appointmentId, LocalDateTime startAt, String note, String status, HairDresser hairDresser) {
 		this.appointmentId = appointmentId;
 		this.startAt = startAt;
 		this.note = note;
+		this.status = AppointmentStatus.PENDING;
 		this.hairdresser = hairDresser;
 	}
 
@@ -73,5 +79,13 @@ public class Appointment {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public AppointmentStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(AppointmentStatus status) {
+		this.status = status;
 	}
 }

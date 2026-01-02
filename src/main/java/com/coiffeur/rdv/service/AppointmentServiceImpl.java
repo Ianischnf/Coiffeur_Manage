@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.coiffeur.rdv.dto.AppointmentRequest;
+import com.coiffeur.rdv.entity.AppointmentStatus;
 import com.coiffeur.rdv.entity.HairDresser;
 import com.coiffeur.rdv.repository.HairDresserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +46,16 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 	@Override
 	public List<Appointment> fetchAllAppointment() {
-		
+
 		return (List<Appointment>)
 				appointmentRepository.findAll();
 	}
 
 	@Override
 	public Appointment updateAppointment(Appointment appointment, Long appointmentId) {
-		
+
 		Appointment appDB = appointmentRepository.findById(appointmentId).get();
-		
+
 		if (Objects.nonNull(appointment.getStartAt())) {
 			appDB.setStartAt(appointment.getStartAt());
 		}
@@ -64,14 +65,76 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 			appDB.setNote(appointment.getNote());
 		}
-		
+
 		return appointmentRepository.save(appDB);
 	}
 
 	@Override
 	public void deleteAppointment(Long appointmentId) {
-		
-		appointmentRepository.deleteById(appointmentId);
+
 	}
+
+	@Override
+	public Appointment acceptAppointment(Long appointmentId, Long HairDresserId) {
+
+		Appointment appointment = appointmentRepository.findById(appointmentId)
+				.orElseThrow(() -> new RuntimeException("RDV introuvable"));
+
+		// Vérifie que le RDV appartient bien à ce coiffeur
+		Long appointmentHairdresserId = appointment.getHairdresser().getId();
+		// si ton entity HairDresser n'a pas getId() encore : .getHairDresserId()
+
+		if (!appointmentHairdresserId.equals(HairDresserId)) {
+			throw new RuntimeException("Accès interdit : ce RDV ne vous appartient pas");
+		}
+
+		// Vérifie le status
+		if (appointment.getStatus() != AppointmentStatus.PENDING) {
+			throw new RuntimeException("RDV déjà traité");
+		}
+
+		appointment.setStatus(AppointmentStatus.ACCEPTED);
+		return appointmentRepository.save(appointment);
+	}
+
+	@Override
+	public Appointment rejectAppointment(Long appointmentId, Long HairDresserId) {
+
+		Appointment appointment = appointmentRepository.findById(appointmentId)
+				.orElseThrow(() -> new RuntimeException("RDV introuvable"));
+
+		Long appointmentHairdresserId = appointment.getHairdresser().getId();
+		// si pas getId(): .getHairDresserId()
+
+		if (!appointmentHairdresserId.equals(HairDresserId)) {
+			throw new RuntimeException("Accès interdit : ce RDV ne vous appartient pas");
+		}
+
+		if (appointment.getStatus() != AppointmentStatus.PENDING) {
+			throw new RuntimeException("RDV déjà traité");
+		}
+
+		appointment.setStatus(AppointmentStatus.REJECTED);
+		return appointmentRepository.save(appointment);
+	}
+
+	@Override
+	public List<Appointment> findByHairdresser_IdAndStatus(Long hairdresserId) {
+		return appointmentRepository.findByHairdresser_IdAndStatus(hairdresserId, AppointmentStatus.PENDING);
+	}
+
+	/**
+	 * ✅ surcharge
+	 */
+	@Override
+	public List<Appointment> findByHairdresser_IdAndStatus(Long hairdresserId, AppointmentStatus status) {
+		return appointmentRepository.findByHairdresser_IdAndStatus(hairdresserId, status);
+	}
+
+	@Override
+	public List<Appointment> findByHairdresser_Id(Long hairdresserId) {
+		return List.of();
+	}
+
 
 }

@@ -14,7 +14,7 @@ public class HairDresser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "id")
-    private Long HairDresserId;
+    private Long id;
 
     @Column(name = "firstname")
     private String FirstName;
@@ -22,28 +22,39 @@ public class HairDresser {
     @Column(name = "lastname")
     private String LastName;
 
+    @Column(name = "email")
+    private String Email;
+
+    @Column(name = "password")
+    private String Password;
+
+
     @OneToMany(mappedBy = "hairdresser")
     private List<Appointment> appointments = new ArrayList<>();
 
     public HairDresser() {}
 
-    public HairDresser(Long HairDresserId, String FirstName, String LastName) {
-        this.HairDresserId = HairDresserId;
+    public HairDresser(Long id, String FirstName, String LastName, String Email, String Password) {
+        this.id = id;
         this.FirstName = FirstName;
         this.LastName = LastName;
+        this.Email = Email;
+        this.Password = Password;
     }
 
-    public HairDresser(String FirstName, String LastName){
+    public HairDresser(String FirstName, String LastName, String Email, String Password ){
         this.FirstName = FirstName;
         this.LastName = LastName;
+        this.Email = Email;
+        this.Password = Password;
     }
 
-    public Long getHairDresserId() {
-        return HairDresserId;
+    public Long getId() {
+        return id;
     }
 
-    public void setHairDresserId(Long hairDresserId) {
-        HairDresserId = hairDresserId;
+    public void setId(Long hairDresserId) {
+        id = id;
     }
 
     public String getFirstName() {
@@ -60,5 +71,29 @@ public class HairDresser {
 
     public void setLastName(String lastName) {
         LastName = lastName;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
     }
 }

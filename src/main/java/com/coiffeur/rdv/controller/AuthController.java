@@ -22,13 +22,16 @@ public class AuthController {
 		this.authService = authService;
 	}
 	
-	@PostMapping("/register")
+	@PostMapping("client/register")
 	 Client register(@Valid @RequestBody RegisterRequest req) {
 		return authService.register(req);
 	}
 	
-	@PostMapping("/login")
+	@PostMapping("client/login")
 	LoginResponse login(@Valid @RequestBody LoginRequest req) {
 		return authService.login(req);
 	}
+
+	@PostMapping("/hairdresser/login")
+	LoginResponse loginHairdresser(@Valid @RequestBody LoginRequest req){ return authService.loginHairdresser(req); }
 }
