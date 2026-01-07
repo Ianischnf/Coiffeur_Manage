@@ -2,6 +2,7 @@ package com.coiffeur.rdv.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,7 +48,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Routes publiques (login / register)
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/hairdresser/**").permitAll()
+
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/auth/hairdresser/login").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/hairdresser").permitAll()
+
+
+                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/hairdresser/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/hairdresser/**").permitAll()
 
 
                         // Toutes les autres routes nécessitent un token valide

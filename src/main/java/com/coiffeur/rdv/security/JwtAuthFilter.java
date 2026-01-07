@@ -28,33 +28,41 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
 
+        // 1️⃣ Pas de header → on laisse passer
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // 2️⃣ Extraire le token
         String token = authHeader.substring(7);
 
+        // 3️⃣ Vérifier le token
         if (!jwtService.isTokenValid(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // 4️⃣ Extraire infos depuis le token
         String email = jwtService.extractEmail(token);
+        String role  = jwtService.extractRole(token);
 
-        // Auth simple: 1 rôle "CLIENT" pour démarrer
+        // 5️⃣ Créer l’auth Spring avec le rôle
         var auth = new UsernamePasswordAuthenticationToken(
                 email,
                 null,
-                List.of(new SimpleGrantedAuthority("ROLE_CLIENT"))
+                List.of(new SimpleGrantedAuthority("ROLE_" + role))
         );
-        auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
         SecurityContextHolder.getContext().setAuthentication(auth);
 
+        // 6️⃣ Continuer la chaîne
         filterChain.doFilter(request, response);
     }
+
 }

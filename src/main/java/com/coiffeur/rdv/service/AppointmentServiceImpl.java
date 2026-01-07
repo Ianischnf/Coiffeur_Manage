@@ -82,7 +82,6 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 		// Vérifie que le RDV appartient bien à ce coiffeur
 		Long appointmentHairdresserId = appointment.getHairdresser().getId();
-		// si ton entity HairDresser n'a pas getId() encore : .getHairDresserId()
 
 		if (!appointmentHairdresserId.equals(HairDresserId)) {
 			throw new RuntimeException("Accès interdit : ce RDV ne vous appartient pas");

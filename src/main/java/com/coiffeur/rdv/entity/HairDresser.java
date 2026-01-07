@@ -23,14 +23,15 @@ public class HairDresser {
     private String LastName;
 
     @Column(name = "email")
-    private String Email;
+    private String email;
 
     @Column(name = "password")
     private String Password;
 
 
-    @OneToMany(mappedBy = "hairdresser")
-    private List<Appointment> appointments = new ArrayList<>();
+    @OneToMany(mappedBy = "hairdresser", cascade = CascadeType.ALL, orphanRemoval = true) //Supprimer les RDV en cascades lors de la suppression d'un coiffeur
+    private List<Appointment> appointments;
+
 
     public HairDresser() {}
 
@@ -38,14 +39,14 @@ public class HairDresser {
         this.id = id;
         this.FirstName = FirstName;
         this.LastName = LastName;
-        this.Email = Email;
+        this.email = Email;
         this.Password = Password;
     }
 
     public HairDresser(String FirstName, String LastName, String Email, String Password ){
         this.FirstName = FirstName;
         this.LastName = LastName;
-        this.Email = Email;
+        this.email = Email;
         this.Password = Password;
     }
 
@@ -90,10 +91,12 @@ public class HairDresser {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        email = email;
     }
+
+
 }
