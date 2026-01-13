@@ -56,7 +56,9 @@ public class SecurityConfig {
 
 
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/hairdresser/**").permitAll()
+
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/hairdresser/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/client/**").permitAll()
 
 
                         // Toutes les autres routes nécessitent un token valide

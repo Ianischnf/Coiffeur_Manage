@@ -6,7 +6,9 @@ import java.util.Objects;
 
 import com.coiffeur.rdv.dto.AppointmentRequest;
 import com.coiffeur.rdv.entity.AppointmentStatus;
+import com.coiffeur.rdv.entity.Client;
 import com.coiffeur.rdv.entity.HairDresser;
+import com.coiffeur.rdv.repository.ClientRepository;
 import com.coiffeur.rdv.repository.HairDresserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,12 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 	private final AppointmentRepository appointmentRepository;
 	private final HairDresserRepository hairDresserRepository;
+	private final ClientRepository clientRepository;
 
-	public AppointmentServiceImpl(AppointmentRepository appointmentRepository, HairDresserRepository hairDresserRepository){
+	public AppointmentServiceImpl(AppointmentRepository appointmentRepository, HairDresserRepository hairDresserRepository, ClientRepository clientRepository){
 		this.appointmentRepository = appointmentRepository;
 		this.hairDresserRepository = hairDresserRepository;
+		this.clientRepository = clientRepository;
 	}
 
 	@Override
@@ -34,11 +38,18 @@ public class AppointmentServiceImpl implements AppointmentService{
 						"Hairdresser not found with id " + req.hairdresserId()
 				));
 
+		Client client = clientRepository
+				.findById(req.clientId())
+				.orElseThrow(() -> new RuntimeException(
+						"Client not found with id " + req.clientId()
+				));
+
 
 		Appointment appointment = new Appointment(
 				req.startAt(),
 				req.note(),
-				hairdresser
+				hairdresser,
+				client
 		);
 
 		return appointmentRepository.save(appointment);

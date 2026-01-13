@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
 			throw new RuntimeException("Mot de passe incorrect");
 		}
 
-		String token = jwtService.generateToken(hairdresser.getEmail(), "HAIDRESSER");
+		String token = jwtService.generateToken(hairdresser.getEmail(), "HAIRDRESSER");
 
 		return new LoginResponse(token);
 	}

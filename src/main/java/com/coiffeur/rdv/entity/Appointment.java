@@ -33,20 +33,26 @@ public class Appointment {
 	@JoinColumn(name = "hairdresser_id", nullable = false)
 	private HairDresser hairdresser;
 
+	@ManyToOne
+	@JoinColumn(name = "client_id")
+	private Client client;
+
 	public Appointment() {}
 
-	public Appointment(Long appointmentId, LocalDateTime startAt, String note, String status, HairDresser hairDresser) {
+	public Appointment(Long appointmentId, LocalDateTime startAt, String note, String status, HairDresser hairDresser, Client client) {
 		this.appointmentId = appointmentId;
 		this.startAt = startAt;
 		this.note = note;
 		this.status = AppointmentStatus.PENDING;
 		this.hairdresser = hairDresser;
+		this.client = client;
 	}
 
-	public Appointment(LocalDateTime startAt, String note, HairDresser hairDresser) {
+	public Appointment(LocalDateTime startAt, String note, HairDresser hairDresser, Client client) {
 		this.startAt = startAt;
 		this.note = note;
 		this.hairdresser = hairDresser;
+		this.client = client;
 	}
 
 	public Long getAppointmentId() {
@@ -87,5 +93,13 @@ public class Appointment {
 
 	public void setStatus(AppointmentStatus status) {
 		this.status = status;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
 	}
 }
