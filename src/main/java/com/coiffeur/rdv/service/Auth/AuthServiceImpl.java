@@ -1,11 +1,10 @@
-package com.coiffeur.rdv.service;
+package com.coiffeur.rdv.service.Auth;
 
 import java.time.LocalDateTime;
 
 import com.coiffeur.rdv.entity.HairDresser;
 import com.coiffeur.rdv.repository.HairDresserRepository;
 import com.coiffeur.rdv.security.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import com.coiffeur.rdv.dto.LoginResponse;
 import com.coiffeur.rdv.dto.RegisterRequest;
 import com.coiffeur.rdv.entity.Client;
 import com.coiffeur.rdv.repository.ClientRepository;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 @Service

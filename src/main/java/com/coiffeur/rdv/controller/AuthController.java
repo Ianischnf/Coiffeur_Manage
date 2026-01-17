@@ -9,7 +9,7 @@ import com.coiffeur.rdv.dto.LoginRequest;
 import com.coiffeur.rdv.dto.LoginResponse;
 import com.coiffeur.rdv.dto.RegisterRequest;
 import com.coiffeur.rdv.entity.Client;
-import com.coiffeur.rdv.service.AuthService;
+import com.coiffeur.rdv.service.Auth.AuthService;
 import jakarta.validation.Valid;
 
 @RestController

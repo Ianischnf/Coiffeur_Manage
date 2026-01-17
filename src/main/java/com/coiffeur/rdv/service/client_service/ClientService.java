@@ -1,8 +1,7 @@
-package com.coiffeur.rdv.service;
+package com.coiffeur.rdv.service.client_service;
 
 import java.util.List;
 
-import com.coiffeur.rdv.dto.RegisterRequest;
 import com.coiffeur.rdv.entity.Client;
 
 public interface ClientService {

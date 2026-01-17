@@ -1,6 +1,5 @@
-package com.coiffeur.rdv.service;
+package com.coiffeur.rdv.service.client_service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.coiffeur.rdv.dto.RegisterRequest;
 import com.coiffeur.rdv.entity.Client;
 import com.coiffeur.rdv.repository.ClientRepository;
 

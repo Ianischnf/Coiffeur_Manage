@@ -1,23 +1,26 @@
-package com.coiffeur.rdv.service;
+package com.coiffeur.rdv.service.appointments;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 import com.coiffeur.rdv.dto.AppointmentRequest;
+import com.coiffeur.rdv.dto.appointment.ClientAppointmentResponse;
+import com.coiffeur.rdv.dto.appointment.HairdresserAppointmentResponse;
 import com.coiffeur.rdv.entity.AppointmentStatus;
 import com.coiffeur.rdv.entity.Client;
 import com.coiffeur.rdv.entity.HairDresser;
 import com.coiffeur.rdv.repository.ClientRepository;
 import com.coiffeur.rdv.repository.HairDresserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.coiffeur.rdv.service.Auth.AuthService;
 import org.springframework.stereotype.Service;
 
 import com.coiffeur.rdv.entity.Appointment;
 import com.coiffeur.rdv.repository.AppointmentRepository;
 
+import static java.util.Arrays.stream;
+
 @Service
-public class AppointmentServiceImpl implements AppointmentService{
+public class AppointmentServiceImpl implements AppointmentService {
 
 	private final AppointmentRepository appointmentRepository;
 	private final HairDresserRepository hairDresserRepository;
@@ -31,6 +34,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 		this.authService = authService;
 	}
 
+	// MANAGER APPOINTMENT FOR CLIENT
 	@Override
 	public Appointment saveAppointment(AppointmentRequest req) {
 
@@ -61,11 +65,24 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 
 	@Override
-	public List<Appointment> fetchAllAppointment() {
+	public List<ClientAppointmentResponse> fetchAllAppointmentForClient() {
+		Long clientId = authService.getCurrentClientId();
 
-		return (List<Appointment>)
-				appointmentRepository.findAll();
+
+		return appointmentRepository.findByClient_Id(clientId)
+				.stream() //Transforme en flux de données pour effectué des oppérations
+				.map(appointment -> new ClientAppointmentResponse(
+						appointment.getAppointmentId(),
+						appointment.getStartAt(),
+						appointment.getNote(),
+						appointment.getStatus(),
+						appointment.getHairdresser().getId(),
+						appointment.getHairdresser().getFirstName() + " " +
+								appointment.getHairdresser().getLastName()
+				))
+				.toList();
 	}
+
 
 	@Override
 	public Appointment updateAppointment(Appointment appointment, Long appointmentId) {
@@ -90,6 +107,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 	}
 
+
+	// MANAGE APPOINTMENTS FOR HAIRDRESSER
 	@Override
 	public Appointment acceptAppointment(Long appointmentId, Long HairDresserId) {
 
@@ -134,23 +153,24 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 
 	@Override
-	public List<Appointment> findByHairdresser_IdAndStatus(Long hairdresserId) {
-		return appointmentRepository.findByHairdresser_IdAndStatus(hairdresserId, AppointmentStatus.PENDING);
-	}
+	public List<HairdresserAppointmentResponse> fetchAppointmentsForHairdresser(AppointmentStatus status) {
+		Long hairdresserId = authService.getCurrentHairdresserId();
 
-	/**
-	 * ✅ surcharge
-	 */
-	@Override
-	public List<Appointment> findByHairdresser_IdAndStatus(Long hairdresserId, AppointmentStatus status) {
-		return appointmentRepository.findByHairdresser_IdAndStatus(hairdresserId, status);
-	}
+		List<Appointment> appointments = (status == null)
+				? appointmentRepository.findByHairdresser_Id(hairdresserId)
+				: appointmentRepository.findByHairdresser_IdAndStatus(hairdresserId, status);
 
-	@Override
-	public List<Appointment> findByHairdresser_Id(Long hairdresserId) {
-		return appointmentRepository.findByHairdresser_Id(hairdresserId);
+		return appointments.stream()
+				.map(appointment -> new HairdresserAppointmentResponse(
+						appointment.getAppointmentId(),
+						appointment.getStartAt(),
+						appointment.getNote(),
+						appointment.getStatus(),
+						appointment.getClient().getClientId(),
+						appointment.getClient().getFirstName() + " " + appointment.getClient().getLastName()
+				))
+				.toList();
 	}
-
 
 
 }

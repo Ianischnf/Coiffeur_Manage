@@ -1,9 +1,9 @@
-package com.coiffeur.rdv.controller;
+package com.coiffeur.rdv.controller.hairdresser;
 
 import com.coiffeur.rdv.entity.Appointment;
 import com.coiffeur.rdv.entity.AppointmentStatus;
-import com.coiffeur.rdv.service.AppointmentService;
-import com.coiffeur.rdv.service.AuthService;
+import com.coiffeur.rdv.service.appointments.AppointmentService;
+import com.coiffeur.rdv.service.Auth.AuthService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

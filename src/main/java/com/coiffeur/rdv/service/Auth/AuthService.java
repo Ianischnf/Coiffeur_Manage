@@ -1,4 +1,4 @@
-package com.coiffeur.rdv.service;
+package com.coiffeur.rdv.service.Auth;
 
 import com.coiffeur.rdv.dto.LoginRequest;
 import com.coiffeur.rdv.dto.LoginResponse;

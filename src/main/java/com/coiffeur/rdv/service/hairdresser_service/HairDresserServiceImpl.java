@@ -1,4 +1,4 @@
-package com.coiffeur.rdv.service;
+package com.coiffeur.rdv.service.hairdresser_service;
 
 import com.coiffeur.rdv.dto.HairDresserRequest;
 import com.coiffeur.rdv.entity.HairDresser;

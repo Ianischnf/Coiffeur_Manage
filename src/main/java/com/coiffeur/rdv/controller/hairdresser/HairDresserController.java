@@ -1,17 +1,13 @@
-package com.coiffeur.rdv.controller;
+package com.coiffeur.rdv.controller.hairdresser;
 
 import com.coiffeur.rdv.dto.HairDresserRequest;
 import com.coiffeur.rdv.entity.HairDresser;
 import com.coiffeur.rdv.repository.AppointmentRepository;
-import com.coiffeur.rdv.service.HairDresserService;
-import com.coiffeur.rdv.service.HairDresserServiceImpl;
-import jakarta.validation.Path;
+import com.coiffeur.rdv.service.hairdresser_service.HairDresserService;
+import com.coiffeur.rdv.service.hairdresser_service.HairDresserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.coiffeur.rdv.controller;
+package com.coiffeur.rdv.controller.client;
 
 import java.util.List;
 
@@ -6,15 +6,15 @@ import com.coiffeur.rdv.dto.AppointmentRequest;
 import org.springframework.web.bind.annotation.*;
 
 import com.coiffeur.rdv.entity.Appointment;
-import com.coiffeur.rdv.service.AppointmentService;
+import com.coiffeur.rdv.service.appointments.AppointmentService;
 
 @RestController
 @RequestMapping("/appointment")
-public class AppointmentController {
+public class ClientAppointmentController {
 
     private final AppointmentService appointmentService;
 
-    public AppointmentController(AppointmentService appointmentService) {
+    public ClientAppointmentController(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
 
