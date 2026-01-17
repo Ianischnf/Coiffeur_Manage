@@ -50,12 +50,15 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/hairdresser/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/appointment/**").permitAll()
 
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/auth/hairdresser/login").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/hairdresser").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/appointment").permitAll()
 
 
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/hairdresser/**").permitAll()
+
 
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/hairdresser/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/client/**").permitAll()

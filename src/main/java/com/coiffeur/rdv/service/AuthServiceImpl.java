@@ -99,4 +99,20 @@ public class AuthServiceImpl implements AuthService {
 
 		return  hairDresser.getId();
 	}
+
+	@Override
+	public Long getCurrentClientId() {
+		var auth = SecurityContextHolder.getContext().getAuthentication();
+		if(auth == null || !auth.isAuthenticated()){
+			throw new RuntimeException("Non authentifié");
+		}
+
+		String email = auth.getName();
+		Client client = clientRepository.findByEmail(email)
+				.orElseThrow(() -> new RuntimeException("Coiffeur introuvable"));
+
+		return  client.getClientId();
+	}
+
+
 }

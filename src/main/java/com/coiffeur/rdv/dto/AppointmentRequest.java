@@ -6,7 +6,6 @@ public record AppointmentRequest(
 
         LocalDateTime startAt,
         String note,
-        Long hairdresserId,
-        Long clientId
+        Long hairdresserId
 ) {
 }

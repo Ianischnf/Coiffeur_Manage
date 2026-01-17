@@ -11,4 +11,5 @@ public interface AuthService {
     LoginResponse login(LoginRequest req);
     LoginResponse loginHairdresser(LoginRequest req);
     Long getCurrentHairdresserId();
+    Long getCurrentClientId();
 }

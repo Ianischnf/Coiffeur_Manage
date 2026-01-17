@@ -22,11 +22,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 	private final AppointmentRepository appointmentRepository;
 	private final HairDresserRepository hairDresserRepository;
 	private final ClientRepository clientRepository;
+	private final AuthService authService;
 
-	public AppointmentServiceImpl(AppointmentRepository appointmentRepository, HairDresserRepository hairDresserRepository, ClientRepository clientRepository){
+	public AppointmentServiceImpl(AppointmentRepository appointmentRepository, HairDresserRepository hairDresserRepository, ClientRepository clientRepository, AuthService authService){
 		this.appointmentRepository = appointmentRepository;
 		this.hairDresserRepository = hairDresserRepository;
 		this.clientRepository = clientRepository;
+		this.authService = authService;
 	}
 
 	@Override
@@ -38,10 +40,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 						"Hairdresser not found with id " + req.hairdresserId()
 				));
 
+		Long connectedClientId = authService.getCurrentClientId();
+		System.out.println("id client connecté : " + connectedClientId);
+
 		Client client = clientRepository
-				.findById(req.clientId())
+				.findById(connectedClientId)
 				.orElseThrow(() -> new RuntimeException(
-						"Client not found with id " + req.clientId()
+						"Client not found with id " + connectedClientId
 				));
 
 
@@ -143,8 +148,9 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 	@Override
 	public List<Appointment> findByHairdresser_Id(Long hairdresserId) {
-		return List.of();
+		return appointmentRepository.findByHairdresser_Id(hairdresserId);
 	}
+
 
 
 }
