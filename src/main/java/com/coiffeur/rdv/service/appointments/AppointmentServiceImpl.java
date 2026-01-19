@@ -1,5 +1,6 @@
 package com.coiffeur.rdv.service.appointments;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,7 +70,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		Long clientId = authService.getCurrentClientId();
 
 
-		return appointmentRepository.findByClient_Id(clientId)
+		return appointmentRepository.findByClient_ClientId(clientId)
 				.stream() //Transforme en flux de données pour effectué des oppérations
 				.map(appointment -> new ClientAppointmentResponse(
 						appointment.getAppointmentId(),
@@ -138,7 +139,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 				.orElseThrow(() -> new RuntimeException("RDV introuvable"));
 
 		Long appointmentHairdresserId = appointment.getHairdresser().getId();
-		// si pas getId(): .getHairDresserId()
 
 		if (!appointmentHairdresserId.equals(HairDresserId)) {
 			throw new RuntimeException("Accès interdit : ce RDV ne vous appartient pas");
@@ -154,11 +154,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public List<HairdresserAppointmentResponse> fetchAppointmentsForHairdresser(AppointmentStatus status) {
-		Long hairdresserId = authService.getCurrentHairdresserId();
 
-		List<Appointment> appointments = (status == null)
-				? appointmentRepository.findByHairdresser_Id(hairdresserId)
-				: appointmentRepository.findByHairdresser_IdAndStatus(hairdresserId, status);
+		Long hairdresserId = authService.getCurrentHairdresserId();
+		List<Appointment> appointments; //Liste des rdv
+
+
+		// CHOIX DE LA LISTE A UTILISER DU REPOSITORY
+		if(status == null){
+			appointments = appointmentRepository.findByHairdresser_Id(hairdresserId);
+		} else {
+			appointments = appointmentRepository.findByHairdresser_IdAndStatus(hairdresserId, status);
+		}
 
 		return appointments.stream()
 				.map(appointment -> new HairdresserAppointmentResponse(
@@ -171,6 +177,4 @@ public class AppointmentServiceImpl implements AppointmentService {
 				))
 				.toList();
 	}
-
-
 }

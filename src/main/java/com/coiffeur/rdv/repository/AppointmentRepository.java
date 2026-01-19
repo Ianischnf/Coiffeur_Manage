@@ -10,7 +10,7 @@ import java.util.List;
 public interface AppointmentRepository extends CrudRepository<Appointment, Long>{
 
     List<Appointment> findByHairdresser_Id(Long hairdresserId);
-    List<Appointment> findByClient_Id(Long clientId);
+    List<Appointment> findByClient_ClientId(Long clientId);
     List<Appointment> findByHairdresser_IdAndStatus(
             Long hairdresserId,
             AppointmentStatus status

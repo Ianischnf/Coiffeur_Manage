@@ -3,6 +3,7 @@ package com.coiffeur.rdv.controller.client;
 import java.util.List;
 
 import com.coiffeur.rdv.dto.AppointmentRequest;
+import com.coiffeur.rdv.dto.appointment.ClientAppointmentResponse;
 import org.springframework.web.bind.annotation.*;
 
 import com.coiffeur.rdv.entity.Appointment;
@@ -24,8 +25,8 @@ public class ClientAppointmentController {
     }
 
     @GetMapping
-    public List<Appointment> fetchAllAppointment() {
-        return appointmentService.fetchAllAppointment();
+    public List<ClientAppointmentResponse> fetchAllAppointment() {
+        return appointmentService.fetchAllAppointmentForClient();
     }
 
     @PutMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.coiffeur.rdv.controller.hairdresser;
 
+import com.coiffeur.rdv.dto.appointment.HairdresserAppointmentResponse;
 import com.coiffeur.rdv.entity.Appointment;
 import com.coiffeur.rdv.entity.AppointmentStatus;
 import com.coiffeur.rdv.service.appointments.AppointmentService;
@@ -22,17 +23,11 @@ public class HairDresserAppointmentController {
 
     /**
      * Liste les RDV du coiffeur connecté
-     * - /hairdresser/appointments -> tous
-     * - /hairdresser/appointments?status=PENDING -> filtré
      */
     @GetMapping
-    public List<Appointment> myAppointments(@RequestParam(required = false) AppointmentStatus status) {
-        Long connectedHairdresserId = authService.getCurrentHairdresserId();
+    public List<HairdresserAppointmentResponse> myAppointments(@RequestParam(required = false) AppointmentStatus status) {
 
-        if (status == null) {
-            return appointmentService.findByHairdresser_Id(connectedHairdresserId);
-        }
-        return appointmentService.findByHairdresser_IdAndStatus(connectedHairdresserId, status);
+        return appointmentService.fetchAppointmentsForHairdresser(status);
     }
 
     /**
