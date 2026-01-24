@@ -1,6 +1,8 @@
 package com.coiffeur.rdv.service.hairdresser_service;
 
-import com.coiffeur.rdv.dto.HairDresserRequest;
+import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserFetch;
+import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserRequest;
+import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserResponse;
 import com.coiffeur.rdv.entity.HairDresser;
 import com.coiffeur.rdv.repository.HairDresserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class HairDresserServiceImpl implements HairDresserService{
     }
 
     @Override
-    public HairDresser addHairDresser(HairDresserRequest req) {
+    public HairDresserResponse addHairDresser(HairDresserRequest req) {
 
         HairDresser hairDresser = new HairDresser(
                 req.FirstName(),
@@ -31,13 +33,28 @@ public class HairDresserServiceImpl implements HairDresserService{
                 passwordEncoder.encode(req.Password())
         );
 
-        return hairDresserRepository.save(hairDresser);
+        HairDresser savedHairDresser = hairDresserRepository.save(hairDresser);
+
+        return new HairDresserResponse(
+                savedHairDresser.getId(),
+                savedHairDresser.getFirstName(),
+                savedHairDresser.getLastName(),
+                savedHairDresser.getFirstName() + " " + savedHairDresser.getLastName()
+        );
+
     }
 
     @Override
-    public List<HairDresser> fetchHairDresserList() {
-        return (List<HairDresser>)
-                hairDresserRepository.findAll();
+    public List<HairDresserFetch> fetchHairDresserList() {
+        return hairDresserRepository.findAll()
+                .stream()
+                .map(hairdresser -> new HairDresserFetch(
+                        hairdresser.getId(),
+                        hairdresser.getFirstName(),
+                        hairdresser.getLastName(),
+                        hairdresser.getEmail()
+                ))
+                .toList();
     }
 
     @Override

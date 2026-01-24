@@ -1,6 +1,4 @@
-package com.coiffeur.rdv.dto;
-
-import jakarta.validation.constraints.Email;
+package com.coiffeur.rdv.dto.hairdresserDTO;
 
 public record HairDresserRequest(
 

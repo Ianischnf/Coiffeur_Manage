@@ -1,6 +1,8 @@
 package com.coiffeur.rdv.controller.hairdresser;
 
+import com.coiffeur.rdv.dto.appointment.AppointmentResponse;
 import com.coiffeur.rdv.dto.appointment.HairdresserAppointmentResponse;
+import com.coiffeur.rdv.dto.hairdresserDTO.AcceptAppointmentDTO;
 import com.coiffeur.rdv.entity.Appointment;
 import com.coiffeur.rdv.entity.AppointmentStatus;
 import com.coiffeur.rdv.service.appointments.AppointmentService;
@@ -26,7 +28,6 @@ public class HairDresserAppointmentController {
      */
     @GetMapping
     public List<HairdresserAppointmentResponse> myAppointments(@RequestParam(required = false) AppointmentStatus status) {
-
         return appointmentService.fetchAppointmentsForHairdresser(status);
     }
 
@@ -34,7 +35,7 @@ public class HairDresserAppointmentController {
      * Accepter un RDV (uniquement si c'est le coiffeur propriétaire)
      */
     @PatchMapping("/{id}/accept")
-    public Appointment accept(@PathVariable("id") Long appointmentId) {
+    public AcceptAppointmentDTO accept(@PathVariable("id") Long appointmentId) {
         Long connectedHairdresserId = authService.getCurrentHairdresserId();
         return appointmentService.acceptAppointment(appointmentId, connectedHairdresserId);
     }
@@ -43,7 +44,7 @@ public class HairDresserAppointmentController {
      * Refuser un RDV (uniquement si c'est le coiffeur propriétaire)
      */
     @PatchMapping("/{id}/reject")
-    public Appointment reject(@PathVariable("id") Long appointmentId) {
+    public AppointmentResponse reject(@PathVariable("id") Long appointmentId) {
         Long connectedHairdresserId = authService.getCurrentHairdresserId();
         return appointmentService.rejectAppointment(appointmentId, connectedHairdresserId);
     }

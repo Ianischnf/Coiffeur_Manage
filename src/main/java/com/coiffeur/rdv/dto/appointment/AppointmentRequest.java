@@ -1,4 +1,4 @@
-package com.coiffeur.rdv.dto;
+package com.coiffeur.rdv.dto.appointment;
 
 import java.time.LocalDateTime;
 

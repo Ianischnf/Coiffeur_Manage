@@ -1,12 +1,13 @@
 package com.coiffeur.rdv.service.appointments;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.coiffeur.rdv.dto.AppointmentRequest;
+import com.coiffeur.rdv.dto.appointment.AppointmentRequest;
+import com.coiffeur.rdv.dto.appointment.AppointmentResponse;
 import com.coiffeur.rdv.dto.appointment.ClientAppointmentResponse;
 import com.coiffeur.rdv.dto.appointment.HairdresserAppointmentResponse;
+import com.coiffeur.rdv.dto.hairdresserDTO.AcceptAppointmentDTO;
 import com.coiffeur.rdv.entity.AppointmentStatus;
 import com.coiffeur.rdv.entity.Client;
 import com.coiffeur.rdv.entity.HairDresser;
@@ -37,7 +38,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	// MANAGER APPOINTMENT FOR CLIENT
 	@Override
-	public Appointment saveAppointment(AppointmentRequest req) {
+	public AppointmentResponse saveAppointment(AppointmentRequest req) {
 
 		HairDresser hairdresser = hairDresserRepository
 				.findById(req.hairdresserId())
@@ -62,9 +63,21 @@ public class AppointmentServiceImpl implements AppointmentService {
 				client
 		);
 
-		return appointmentRepository.save(appointment);
+		Appointment savedAppointment = appointmentRepository.save(appointment);
+
+		return new AppointmentResponse(
+				savedAppointment.getAppointmentId(),
+				savedAppointment.getStartAt(),
+				savedAppointment.getNote(),
+				savedAppointment.getStatus(),
+				savedAppointment.getHairdresser()
+
+		);
+
+
 	}
 
+	//recuperation rdv des clients
 	@Override
 	public List<ClientAppointmentResponse> fetchAllAppointmentForClient() {
 		Long clientId = authService.getCurrentClientId();
@@ -83,7 +96,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 				))
 				.toList();
 	}
-
 
 	@Override
 	public Appointment updateAppointment(Appointment appointment, Long appointmentId) {
@@ -111,7 +123,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	// MANAGE APPOINTMENTS FOR HAIRDRESSER
 	@Override
-	public Appointment acceptAppointment(Long appointmentId, Long HairDresserId) {
+	public AcceptAppointmentDTO acceptAppointment(Long appointmentId, Long HairDresserId) {
 
 		Appointment appointment = appointmentRepository.findById(appointmentId)
 				.orElseThrow(() -> new RuntimeException("RDV introuvable"));
@@ -129,11 +141,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 		}
 
 		appointment.setStatus(AppointmentStatus.ACCEPTED);
-		return appointmentRepository.save(appointment);
+		Appointment savedAppointmentStatus = appointmentRepository.save(appointment);
+
+		return new AcceptAppointmentDTO(
+				savedAppointmentStatus.getAppointmentId(),
+				savedAppointmentStatus.getStatus()
+		);
 	}
 
 	@Override
-	public Appointment rejectAppointment(Long appointmentId, Long HairDresserId) {
+	public AppointmentResponse rejectAppointment(Long appointmentId, Long HairDresserId) {
 
 		Appointment appointment = appointmentRepository.findById(appointmentId)
 				.orElseThrow(() -> new RuntimeException("RDV introuvable"));
@@ -149,9 +166,20 @@ public class AppointmentServiceImpl implements AppointmentService {
 		}
 
 		appointment.setStatus(AppointmentStatus.REJECTED);
-		return appointmentRepository.save(appointment);
+		Appointment savedAppointmentReject = appointmentRepository.save(appointment);
+
+		return new AppointmentResponse(
+				savedAppointmentReject.getAppointmentId(),
+				savedAppointmentReject.getStartAt(),
+				savedAppointmentReject.getNote(),
+				savedAppointmentReject.getStatus(),
+				savedAppointmentReject.getHairdresser()
+		);
+
 	}
 
+
+	// recuperation rdv pour coiffeur
 	@Override
 	public List<HairdresserAppointmentResponse> fetchAppointmentsForHairdresser(AppointmentStatus status) {
 

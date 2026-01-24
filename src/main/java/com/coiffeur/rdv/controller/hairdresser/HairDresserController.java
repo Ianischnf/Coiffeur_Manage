@@ -1,6 +1,8 @@
 package com.coiffeur.rdv.controller.hairdresser;
 
-import com.coiffeur.rdv.dto.HairDresserRequest;
+import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserFetch;
+import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserRequest;
+import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserResponse;
 import com.coiffeur.rdv.entity.HairDresser;
 import com.coiffeur.rdv.repository.AppointmentRepository;
 import com.coiffeur.rdv.service.hairdresser_service.HairDresserService;
@@ -24,12 +26,12 @@ public class HairDresserController {
     }
 
     @PostMapping
-    public HairDresser addHairdresser(@Valid @RequestBody HairDresserRequest req){
+    public HairDresserResponse addHairdresser(@Valid @RequestBody HairDresserRequest req){
         return this.hairDresserService.addHairDresser(req);
     }
 
     @GetMapping
-    public List<HairDresser> fetchHairDresserList(){
+    public List<HairDresserFetch> fetchHairDresserList(){
         return this.hairDresserService.fetchHairDresserList();
     }
 

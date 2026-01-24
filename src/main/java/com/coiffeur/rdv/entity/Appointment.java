@@ -26,12 +26,12 @@ public class Appointment {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
-	private AppointmentStatus status;
-
+	private AppointmentStatus status = AppointmentStatus.PENDING;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "hairdresser_id", nullable = false)
 	private HairDresser hairdresser;
+
 
 	@ManyToOne
 	@JoinColumn(name = "client_id")
@@ -43,7 +43,6 @@ public class Appointment {
 		this.appointmentId = appointmentId;
 		this.startAt = startAt;
 		this.note = note;
-		this.status = AppointmentStatus.PENDING;
 		this.hairdresser = hairDresser;
 		this.client = client;
 	}
