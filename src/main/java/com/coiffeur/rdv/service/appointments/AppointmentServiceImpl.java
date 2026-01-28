@@ -8,6 +8,7 @@ import com.coiffeur.rdv.dto.appointment.AppointmentResponse;
 import com.coiffeur.rdv.dto.appointment.ClientAppointmentResponse;
 import com.coiffeur.rdv.dto.appointment.HairdresserAppointmentResponse;
 import com.coiffeur.rdv.dto.hairdresserDTO.AcceptAppointmentDTO;
+import com.coiffeur.rdv.dto.hairdresserDTO.RefuseAppointmentDTO;
 import com.coiffeur.rdv.entity.AppointmentStatus;
 import com.coiffeur.rdv.entity.Client;
 import com.coiffeur.rdv.entity.HairDresser;
@@ -150,7 +151,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public AppointmentResponse rejectAppointment(Long appointmentId, Long HairDresserId) {
+	public RefuseAppointmentDTO rejectAppointment(Long appointmentId, Long HairDresserId) {
 
 		Appointment appointment = appointmentRepository.findById(appointmentId)
 				.orElseThrow(() -> new RuntimeException("RDV introuvable"));
@@ -165,15 +166,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 			throw new RuntimeException("RDV déjà traité");
 		}
 
-		appointment.setStatus(AppointmentStatus.REJECTED);
+		appointment.setStatus(AppointmentStatus.REFUSED);
 		Appointment savedAppointmentReject = appointmentRepository.save(appointment);
 
-		return new AppointmentResponse(
+		return new RefuseAppointmentDTO(
 				savedAppointmentReject.getAppointmentId(),
-				savedAppointmentReject.getStartAt(),
-				savedAppointmentReject.getNote(),
-				savedAppointmentReject.getStatus(),
-				savedAppointmentReject.getHairdresser()
+				savedAppointmentReject.getStatus()
 		);
 
 	}

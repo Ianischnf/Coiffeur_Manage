@@ -3,6 +3,7 @@ package com.coiffeur.rdv.controller.hairdresser;
 import com.coiffeur.rdv.dto.appointment.AppointmentResponse;
 import com.coiffeur.rdv.dto.appointment.HairdresserAppointmentResponse;
 import com.coiffeur.rdv.dto.hairdresserDTO.AcceptAppointmentDTO;
+import com.coiffeur.rdv.dto.hairdresserDTO.RefuseAppointmentDTO;
 import com.coiffeur.rdv.entity.Appointment;
 import com.coiffeur.rdv.entity.AppointmentStatus;
 import com.coiffeur.rdv.service.appointments.AppointmentService;
@@ -44,7 +45,7 @@ public class HairDresserAppointmentController {
      * Refuser un RDV (uniquement si c'est le coiffeur propriétaire)
      */
     @PatchMapping("/{id}/reject")
-    public AppointmentResponse reject(@PathVariable("id") Long appointmentId) {
+    public RefuseAppointmentDTO reject(@PathVariable("id") Long appointmentId) {
         Long connectedHairdresserId = authService.getCurrentHairdresserId();
         return appointmentService.rejectAppointment(appointmentId, connectedHairdresserId);
     }
