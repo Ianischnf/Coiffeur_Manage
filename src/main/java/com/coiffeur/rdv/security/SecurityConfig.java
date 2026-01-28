@@ -15,67 +15,48 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // 🔑 Filtre JWT qui va lire le token Authorization: Bearer ...
     private final JwtAuthFilter jwtAuthFilter;
 
-    // Injection du filtre JWT par Spring
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
-    // 🔐 Encoder de mot de passe (login / register)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 🔐 Configuration principale Spring Security
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                // 🌍 Autorise les requêtes cross-origin (Angular, Postman)
-                .cors(cors -> {})
-
-                // ❌ CSRF inutile pour une API REST stateless
+                .cors(cors -> {}) // ✅ utilisera le CorsConfigurationSource défini ailleurs (CorsConfig)
                 .csrf(csrf -> csrf.disable())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // 🚫 Pas de session HTTP (JWT uniquement)
-                .sessionManagement(sm ->
-                        sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-
-                // 🔓 Règles d'accès
                 .authorizeHttpRequests(auth -> auth
-                        // Routes publiques (login / register)
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/hairdresser/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/appointment/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/hairdresser/login").permitAll()
 
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/auth/hairdresser/login").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/hairdresser").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/appointment").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/hairdresser").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/appointment").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/hairdresser/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/appointment/**").permitAll()
 
-                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/hairdresser/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/hairdresser/**").permitAll()
 
+                        .requestMatchers(HttpMethod.DELETE, "/hairdresser/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/client/**").permitAll()
 
-                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/hairdresser/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/client/**").permitAll()
-
-
-                        // Toutes les autres routes nécessitent un token valide
                         .anyRequest().authenticated()
                 )
 
-                // 🧠 Ajout du filtre JWT AVANT le filtre d'authentification Spring
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // ❌ Désactive login form & basic auth (API only)
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable())
-
-                // ✅ Build final de la chaîne de sécurité
                 .build();
     }
 }

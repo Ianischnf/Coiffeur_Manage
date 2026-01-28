@@ -18,7 +18,7 @@ public class CorsConfig {
         // ✅ plus robuste que setAllowedOrigins (surtout avec credentials)
         config.setAllowedOriginPatterns(List.of("http://localhost:4200"));
 
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
