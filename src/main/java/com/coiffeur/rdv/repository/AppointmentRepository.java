@@ -15,4 +15,5 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Long>
             Long hairdresserId,
             AppointmentStatus status
     );
+
 }

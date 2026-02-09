@@ -10,6 +10,6 @@ public record AppointmentResponse(
         LocalDateTime startAt,
         String note,
         AppointmentStatus status,
-        HairDresser hairdresserId
+        Long hairdresserId
 ) {
 }

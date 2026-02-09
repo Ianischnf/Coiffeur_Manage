@@ -71,7 +71,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 				savedAppointment.getStartAt(),
 				savedAppointment.getNote(),
 				savedAppointment.getStatus(),
-				savedAppointment.getHairdresser()
+				savedAppointment.getHairdresser().getId()
 
 		);
 
@@ -203,4 +203,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 				))
 				.toList();
 	}
+
+
 }
