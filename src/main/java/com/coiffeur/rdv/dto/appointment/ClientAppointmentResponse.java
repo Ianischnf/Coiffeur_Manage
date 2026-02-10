@@ -5,7 +5,7 @@ import com.coiffeur.rdv.entity.AppointmentStatus;
 import java.time.LocalDateTime;
 
 public record ClientAppointmentResponse(
-        Long AppointmentId,
+        Long appointmentId,
         LocalDateTime startAt,
         String note,
         AppointmentStatus status,
