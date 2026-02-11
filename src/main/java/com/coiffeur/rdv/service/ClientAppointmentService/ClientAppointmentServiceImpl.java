@@ -1,4 +1,4 @@
-package com.coiffeur.rdv.service.appointments;
+package com.coiffeur.rdv.service.ClientAppointmentService;
 
 import java.util.List;
 import java.util.Objects;
@@ -6,10 +6,6 @@ import java.util.Objects;
 import com.coiffeur.rdv.dto.appointment.AppointmentRequest;
 import com.coiffeur.rdv.dto.appointment.AppointmentResponse;
 import com.coiffeur.rdv.dto.appointment.ClientAppointmentResponse;
-import com.coiffeur.rdv.dto.appointment.HairdresserAppointmentResponse;
-import com.coiffeur.rdv.dto.hairdresserDTO.AcceptAppointmentDTO;
-import com.coiffeur.rdv.dto.hairdresserDTO.RefuseAppointmentDTO;
-import com.coiffeur.rdv.entity.AppointmentStatus;
 import com.coiffeur.rdv.entity.Client;
 import com.coiffeur.rdv.entity.HairDresser;
 import com.coiffeur.rdv.repository.ClientRepository;
@@ -23,14 +19,14 @@ import com.coiffeur.rdv.repository.AppointmentRepository;
 import static java.util.Arrays.stream;
 
 @Service
-public class AppointmentServiceImpl implements AppointmentService {
+public class ClientAppointmentServiceImpl implements ClientAppointmentService {
 
 	private final AppointmentRepository appointmentRepository;
 	private final HairDresserRepository hairDresserRepository;
 	private final ClientRepository clientRepository;
 	private final AuthService authService;
 
-	public AppointmentServiceImpl(AppointmentRepository appointmentRepository, HairDresserRepository hairDresserRepository, ClientRepository clientRepository, AuthService authService){
+	public ClientAppointmentServiceImpl(AppointmentRepository appointmentRepository, HairDresserRepository hairDresserRepository, ClientRepository clientRepository, AuthService authService){
 		this.appointmentRepository = appointmentRepository;
 		this.hairDresserRepository = hairDresserRepository;
 		this.clientRepository = clientRepository;
@@ -121,89 +117,5 @@ public class AppointmentServiceImpl implements AppointmentService {
 		appointmentRepository.deleteById(appointmentId);
 
 	}
-
-
-	// MANAGE APPOINTMENTS FOR HAIRDRESSER
-	@Override
-	public AcceptAppointmentDTO acceptAppointment(Long appointmentId, Long HairDresserId) {
-
-		Appointment appointment = appointmentRepository.findById(appointmentId)
-				.orElseThrow(() -> new RuntimeException("RDV introuvable"));
-
-		// Vérifie que le RDV appartient bien à ce coiffeur
-		Long appointmentHairdresserId = appointment.getHairdresser().getId();
-
-		if (!appointmentHairdresserId.equals(HairDresserId)) {
-			throw new RuntimeException("Accès interdit : ce RDV ne vous appartient pas");
-		}
-
-		// Vérifie le status
-		if (appointment.getStatus() != AppointmentStatus.PENDING) {
-			throw new RuntimeException("RDV déjà traité");
-		}
-
-		appointment.setStatus(AppointmentStatus.ACCEPTED);
-		Appointment savedAppointmentStatus = appointmentRepository.save(appointment);
-
-		return new AcceptAppointmentDTO(
-				savedAppointmentStatus.getAppointmentId(),
-				savedAppointmentStatus.getStatus()
-		);
-	}
-
-	@Override
-	public RefuseAppointmentDTO rejectAppointment(Long appointmentId, Long HairDresserId) {
-
-		Appointment appointment = appointmentRepository.findById(appointmentId)
-				.orElseThrow(() -> new RuntimeException("RDV introuvable"));
-
-		Long appointmentHairdresserId = appointment.getHairdresser().getId();
-
-		if (!appointmentHairdresserId.equals(HairDresserId)) {
-			throw new RuntimeException("Accès interdit : ce RDV ne vous appartient pas");
-		}
-
-		if (appointment.getStatus() != AppointmentStatus.PENDING) {
-			throw new RuntimeException("RDV déjà traité");
-		}
-
-		appointment.setStatus(AppointmentStatus.REFUSED);
-		Appointment savedAppointmentReject = appointmentRepository.save(appointment);
-
-		return new RefuseAppointmentDTO(
-				savedAppointmentReject.getAppointmentId(),
-				savedAppointmentReject.getStatus()
-		);
-
-	}
-
-
-	// recuperation rdv pour coiffeur
-	@Override
-	public List<HairdresserAppointmentResponse> fetchAppointmentsForHairdresser(AppointmentStatus status) {
-
-		Long hairdresserId = authService.getCurrentHairdresserId();
-		List<Appointment> appointments; //Liste des rdv
-
-
-		// CHOIX DE LA LISTE A UTILISER DU REPOSITORY
-		if(status == null){
-			appointments = appointmentRepository.findByHairdresser_Id(hairdresserId);
-		} else {
-			appointments = appointmentRepository.findByHairdresser_IdAndStatus(hairdresserId, status);
-		}
-
-		return appointments.stream()
-				.map(appointment -> new HairdresserAppointmentResponse(
-						appointment.getAppointmentId(),
-						appointment.getStartAt(),
-						appointment.getNote(),
-						appointment.getStatus(),
-						appointment.getClient().getClientId(),
-						appointment.getClient().getFirstName() + " " + appointment.getClient().getLastName()
-				))
-				.toList();
-	}
-
 
 }

@@ -1,13 +1,12 @@
 package com.coiffeur.rdv.controller.hairdresser;
 
-import com.coiffeur.rdv.dto.appointment.AppointmentResponse;
 import com.coiffeur.rdv.dto.appointment.HairdresserAppointmentResponse;
 import com.coiffeur.rdv.dto.hairdresserDTO.AcceptAppointmentDTO;
 import com.coiffeur.rdv.dto.hairdresserDTO.RefuseAppointmentDTO;
-import com.coiffeur.rdv.entity.Appointment;
 import com.coiffeur.rdv.entity.AppointmentStatus;
-import com.coiffeur.rdv.service.appointments.AppointmentService;
+import com.coiffeur.rdv.service.ClientAppointmentService.ClientAppointmentService;
 import com.coiffeur.rdv.service.Auth.AuthService;
+import com.coiffeur.rdv.service.HairdresserAppointmentService.HairdresserAppointmentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +15,11 @@ import java.util.List;
 @RequestMapping("/hairdresser/appointments")
 public class HairDresserAppointmentController {
 
-    private final AppointmentService appointmentService;
+    private final HairdresserAppointmentService hairdresserAppointmentService;
     private final AuthService authService;
 
-    public HairDresserAppointmentController(AppointmentService appointmentService, AuthService authService) {
-        this.appointmentService = appointmentService;
+    public HairDresserAppointmentController(HairdresserAppointmentService hairdresserAppointmentService, AuthService authService) {
+        this.hairdresserAppointmentService = hairdresserAppointmentService;
         this.authService = authService;
     }
 
@@ -29,7 +28,7 @@ public class HairDresserAppointmentController {
      */
     @GetMapping
     public List<HairdresserAppointmentResponse> myAppointments(@RequestParam(required = false) AppointmentStatus status) {
-        return appointmentService.fetchAppointmentsForHairdresser(status);
+        return hairdresserAppointmentService.fetchAppointmentsForHairdresser(status);
     }
 
     /**
@@ -38,7 +37,7 @@ public class HairDresserAppointmentController {
     @PatchMapping("/{id}/accept")
     public AcceptAppointmentDTO accept(@PathVariable("id") Long appointmentId) {
         Long connectedHairdresserId = authService.getCurrentHairdresserId();
-        return appointmentService.acceptAppointment(appointmentId, connectedHairdresserId);
+        return hairdresserAppointmentService.acceptAppointment(appointmentId, connectedHairdresserId);
     }
 
     /**
@@ -47,6 +46,6 @@ public class HairDresserAppointmentController {
     @PatchMapping("/{id}/reject")
     public RefuseAppointmentDTO reject(@PathVariable("id") Long appointmentId) {
         Long connectedHairdresserId = authService.getCurrentHairdresserId();
-        return appointmentService.rejectAppointment(appointmentId, connectedHairdresserId);
+        return hairdresserAppointmentService.rejectAppointment(appointmentId, connectedHairdresserId);
     }
 }
