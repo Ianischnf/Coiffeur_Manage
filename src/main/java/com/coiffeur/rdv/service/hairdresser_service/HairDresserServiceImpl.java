@@ -1,9 +1,11 @@
 package com.coiffeur.rdv.service.hairdresser_service;
 
 import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserFetch;
+import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserProfilDTO;
 import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserRequest;
 import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserResponse;
 import com.coiffeur.rdv.entity.HairDresser;
+import com.coiffeur.rdv.enumerations.Roles;
 import com.coiffeur.rdv.repository.HairDresserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class HairDresserServiceImpl implements HairDresserService{
@@ -26,15 +29,19 @@ public class HairDresserServiceImpl implements HairDresserService{
     @Override
     public HairDresserResponse addHairDresser(HairDresserRequest req) {
 
+        //Transformation du DTO envoyé par le front en entity
         HairDresser hairDresser = new HairDresser(
                 req.FirstName(),
                 req.LastName(),
                 req.Email(),
-                passwordEncoder.encode(req.Password())
+                passwordEncoder.encode(req.Password()),
+                Roles.HAIRDRESSER
         );
+
 
         HairDresser savedHairDresser = hairDresserRepository.save(hairDresser);
 
+        //Transformation de l'entity en DTO pour répondre
         return new HairDresserResponse(
                 savedHairDresser.getId(),
                 savedHairDresser.getFirstName(),
@@ -55,6 +62,21 @@ public class HairDresserServiceImpl implements HairDresserService{
                         hairdresser.getEmail()
                 ))
                 .toList();
+    }
+
+    @Override
+    public HairDresserProfilDTO fetchHairDresserById(Long hairDresserId){
+
+        //retourne un optional et extrait l'id de celui-ci
+        HairDresser hairDresser = hairDresserRepository.findById(hairDresserId).orElseThrow(() -> new RuntimeException("Coiffeur introuvable"));
+
+        //construction du DTO
+        return new HairDresserProfilDTO(
+                hairDresser.getId(),
+                hairDresser.getFirstName(),
+                hairDresser.getLastName(),
+                hairDresser.getEmail()
+        );
     }
 
     @Override

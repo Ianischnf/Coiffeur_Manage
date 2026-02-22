@@ -1,6 +1,7 @@
 package com.coiffeur.rdv.entity;
 
 
+import com.coiffeur.rdv.enumerations.Roles;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class HairDresser {
     @OneToMany(mappedBy = "hairdresser", cascade = CascadeType.ALL, orphanRemoval = true) //Supprimer les RDV en cascades lors de la suppression d'un coiffeur
     private List<Appointment> appointments;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Roles roles = Roles.HAIRDRESSER;
 
     public HairDresser() {}
 
@@ -43,10 +47,11 @@ public class HairDresser {
         this.Password = Password;
     }
 
-    public HairDresser(String FirstName, String LastName, String Email, String Password ){
+    public HairDresser(String FirstName, String LastName, String Email, String Password, Roles roles ){
         this.FirstName = FirstName;
         this.LastName = LastName;
         this.email = Email;
+        this.roles = roles;
         this.Password = Password;
     }
 
@@ -98,5 +103,11 @@ public class HairDresser {
         email = email;
     }
 
+    public Roles getRoles() {
+        return roles;
+    }
 
+    public void setRoles(Roles roles) {
+        this.roles = roles;
+    }
 }

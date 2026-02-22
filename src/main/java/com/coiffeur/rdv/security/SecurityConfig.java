@@ -34,28 +34,15 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        // ✅ préflight CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // ✅ Swagger / OpenAPI
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
-
-                        // ✅ Auth public
-                        .requestMatchers("/auth/**").permitAll()
-
-                        // (optionnel) exemples d'API publiques
-                        // .requestMatchers(HttpMethod.POST, "/hairdresser").permitAll()
-                        // .requestMatchers(HttpMethod.POST, "/appointment").permitAll()
-                        // .requestMatchers(HttpMethod.GET,  "/hairdresser/**").permitAll()
-                        // .requestMatchers(HttpMethod.GET,  "/appointment/**").permitAll()
-
-                        // 🔒 tout le reste protégé
+                        .requestMatchers(HttpMethod.POST, "/hairdresser/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/hairdresser/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,  "/hairdresser/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
+
 
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 

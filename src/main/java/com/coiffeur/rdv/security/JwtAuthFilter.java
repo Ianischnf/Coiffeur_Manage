@@ -44,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // ✅ Si déjà authentifié (rare mais possible), on ne refait pas le boulot
+        // Si déjà authentifié, on ne refait pas le boulot
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
@@ -58,26 +58,26 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 2) Extraire le token
+        // Extraire le token
         String token = authHeader.substring(7).trim();
 
-        // 3) Token vide -> on laisse passer
+        // Token vide -> on laisse passer
         if (token.isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 4) Vérifier le token
+        //Vérifier le token
         if (!jwtService.isTokenValid(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 5) Extraire infos depuis le token
+        //Extraire infos depuis le token
         String email = jwtService.extractEmail(token);
         String role  = jwtService.extractRole(token);
 
-        // 6) Construire l'auth Spring
+        // Construire l'objet de l'auth Spring (pour les fonctions qui récupère l'id de l'user connecté)
         var authentication = new UsernamePasswordAuthenticationToken(
                 email,
                 null,

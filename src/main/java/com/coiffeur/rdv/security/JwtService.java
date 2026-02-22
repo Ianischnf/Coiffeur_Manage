@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import com.coiffeur.rdv.enumerations.Roles;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +26,13 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.expirationMs = expirationMs;
     }
-    public String generateToken(String email, String role) {
+    public String generateToken(String email, Roles role) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
                 .setSubject(email)
-                .claim("role", role)
+                .claim("role", role.name())
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(key)
@@ -46,6 +47,10 @@ public class JwtService {
         return getClaims(token).get("role", String.class);
     }
 
+    /*public String extractRole(String token) {
+        return getClaims(token).get("role", String.class);
+    }*/
+
     public boolean isTokenValid(String token) {
         try {
             getClaims(token);
@@ -54,6 +59,7 @@ public class JwtService {
             return false;
         }
     }
+
 
     private Claims getClaims(String token) {
         return Jwts.parserBuilder()

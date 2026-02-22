@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
 	    }
 
 	    // 3️⃣ générer le JWT (avec l’email)
-	    String token = jwtService.generateToken(client.getEmail(), "CLIENT");
+	    String token = jwtService.generateToken(client.getEmail(), client.getRoles());
 
 	    // 4️⃣ renvoyer le token
 	    return new LoginResponse(token);
@@ -79,7 +79,8 @@ public class AuthServiceImpl implements AuthService {
 			throw new RuntimeException("Mot de passe incorrect");
 		}
 
-		String token = jwtService.generateToken(hairdresser.getEmail(), "HAIRDRESSER");
+
+		String token = jwtService.generateToken(hairdresser.getEmail(), hairdresser.getRoles());
 
 		return new LoginResponse(token);
 	}

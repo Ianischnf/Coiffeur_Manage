@@ -2,6 +2,7 @@ package com.coiffeur.rdv.entity;
 
 import java.time.LocalDateTime;
 
+import com.coiffeur.rdv.enumerations.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -41,15 +42,19 @@ public class Client {
 	@Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private Roles roles = Roles.CLIENT;
+
     public Client() {}
 
-    public Client(Long clientId, String firstName, String lastName, String phone, String email, LocalDateTime createdAt) {
+    public Client(Long clientId, String firstName, String lastName, String phone, String email, LocalDateTime createdAt, Roles roles) {
         this.clientId = clientId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
         this.createdAt = createdAt;
+        this.roles = roles;
     }
 
     public Client(String firstName, String lastName, String phone, String email, String password, LocalDateTime createdAt) {
@@ -79,4 +84,11 @@ public class Client {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
+    public Roles getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Roles roles) {
+        this.roles = roles;
+    }
 }

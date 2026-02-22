@@ -1,6 +1,7 @@
 package com.coiffeur.rdv.controller.hairdresser;
 
 import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserFetch;
+import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserProfilDTO;
 import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserRequest;
 import com.coiffeur.rdv.dto.hairdresserDTO.HairDresserResponse;
 import com.coiffeur.rdv.entity.HairDresser;
@@ -33,6 +34,11 @@ public class HairDresserController {
     @GetMapping
     public List<HairDresserFetch> fetchHairDresserList(){
         return this.hairDresserService.fetchHairDresserList();
+    }
+
+    @GetMapping("/{id}")
+    public HairDresserProfilDTO fetchHairDresserById(@PathVariable("id") Long hairDresserId) {
+        return this.hairDresserService.fetchHairDresserById(hairDresserId);
     }
 
     @PutMapping("/{id}")
